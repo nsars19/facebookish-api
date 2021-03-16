@@ -2,11 +2,11 @@ const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
+require("dotenv").config();
 
 // Setup MongoDB
 const mongoose = require("mongoose");
-const mongoDB =
-  "mongodb+srv://nick2:test1234@realmcluster.htwkr.mongodb.net/local_library?retryWrites=true&w=majority";
+const mongoDB = `mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASS}@realmcluster.htwkr.mongodb.net/local_library?retryWrites=true&w=majority`;
 
 mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
 
