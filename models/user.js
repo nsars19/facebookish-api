@@ -15,6 +15,10 @@ const UserSchema = new Schema({
     minLength: 1,
     maxLength: 100,
   },
+  passwordHash: {
+    type: String,
+    required: true,
+  },
   email: {
     type: String,
     required: true,
