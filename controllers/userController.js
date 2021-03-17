@@ -9,7 +9,8 @@ exports.findUser = (req, res, next) => {
   const { userId } = req.params;
 
   User.findById(userId)
-    .then((user) => res.json(user));
+    .then((user) => res.json(user))
+    .catch((err) => res.json({ message: "User not found." }));
 };
 
 exports.newUser = async (req, res) => {
