@@ -30,6 +30,9 @@ const UserSchema = new Schema({
       message: (props) => `${props.value} is not a valid email.`,
     },
   },
+  posts: [{ type: Schema.Types.ObjectId, ref: "Post" }],
+  comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
+  friends: [{ type: Schema.Types.ObjectId, ref: "User" }],
 });
 
 UserSchema.plugin(uniqueValidator);
