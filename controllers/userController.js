@@ -40,11 +40,7 @@ exports.updateUser = async (req, res) => {
   const { userId, newInfo } = req.body;
 
   const user = await User.findByIdAndUpdate(userId, newInfo);
-
-  await user
-    .save()
-    .then((result) => res.json(result))
-    .catch((err) => res.json(err));
+  res.json(user);
 };
 
 // DELETE
