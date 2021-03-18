@@ -1,10 +1,12 @@
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
 
+// INDEX
 exports.getUsers = (req, res, next) => {
   User.find({}).then((users) => res.json(users));
 };
 
+// SHOW
 exports.findUser = (req, res, next) => {
   const { userId } = req.params;
 
@@ -13,6 +15,7 @@ exports.findUser = (req, res, next) => {
     .catch((err) => res.json({ message: "User not found." }));
 };
 
+// CREATE
 exports.newUser = async (req, res) => {
   const { firstName, lastName, email, password } = req.body;
 
@@ -31,3 +34,7 @@ exports.newUser = async (req, res) => {
     .then((user) => res.json(user))
     .catch((err) => res.json(err.message));
 };
+
+// UPDATE
+
+// DELETE
