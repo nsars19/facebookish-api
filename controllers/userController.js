@@ -39,6 +39,15 @@ exports.newUser = async (req, res) => {
 exports.updateUser = async (req, res) => {
   const { userId, newInfo } = req.body;
 
+  const keys = Object.keys(newInfo);
+  if (keys.includes("password")) {
+    const saltRounds = 10;
+    const passwordHash = await bcrypt.hash(newInfo.password, saltRounds);
+
+    delete newInfo.password;
+    newInfo.passwordHash = passwordHash;
+  }
+
   const user = await User.findByIdAndUpdate(userId, newInfo);
   res.json(user);
 };
