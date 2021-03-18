@@ -39,7 +39,10 @@ exports.newUser = async (req, res) => {
 exports.updateUser = async (req, res) => {
   const { userId, newInfo } = req.body;
 
-  await User.findByIdAndUpdate(userId, newInfo)
+  const user = await User.findByIdAndUpdate(userId, newInfo);
+
+  await user
+    .save()
     .then((result) => res.json(result))
     .catch((err) => res.json(err));
 };
