@@ -45,3 +45,10 @@ exports.updateUser = async (req, res) => {
 };
 
 // DELETE
+exports.deleteUser = async (req, res) => {
+  const { userId } = req.body;
+
+  await User.findByIdAndDelete(userId)
+    .then((result) => res.json(result))
+    .catch((err) => res.json(err));
+};
