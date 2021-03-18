@@ -19,6 +19,7 @@ db.on("error", console.error.bind(console, "MongoDB connection error:"));
 // Setup Routes
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
+const postsRouter = require("./routes/posts");
 
 const app = express();
 
@@ -31,5 +32,6 @@ app.use(cors({ origin: "http://localhost:3001" }));
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
+app.use("/posts", postsRouter);
 
 module.exports = app;
