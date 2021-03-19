@@ -24,6 +24,28 @@ exports.getUserPosts = async (req, res) => {
   res.json(posts);
 };
 
+// FRIEND POSTS
+exports.getFriendsPosts = async (req, res) => {
+  const { userId } = req.body;
+  const user = await User.findById(userId);
+  const friends = user.friends;
+  const posts = await Post.find({
+    author: {
+      $in: friends,
+    },
+  })
+    .populate("author", { firstName: 1, lastName: 1 })
+    .populate({
+      path: "comments",
+      populate: {
+        path: "author",
+        model: "User",
+      },
+    });
+
+  res.json(posts);
+};
+
 // CREATE
 exports.createPost = async (req, res) => {
   const { text, author } = req.body;
