@@ -10,7 +10,7 @@ const cors = require("cors");
 
 // Setup MongoDB
 const mongoose = require("mongoose");
-const mongoDB = `mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASS}@realmcluster.htwkr.mongodb.net/social_clone?retryWrites=true&w=majority`;
+const mongoDB = `${process.env.MONGO_URI}`;
 mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
 
 const db = mongoose.connection;
