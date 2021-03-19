@@ -17,6 +17,13 @@ exports.showPost = async (req, res) => {
     .catch((err) => res.json(err));
 };
 
+// USER POSTS
+exports.getUserPosts = async (req, res) => {
+  const { userId } = req.params;
+  const posts = await Post.find({ author: userId });
+  res.json(posts);
+};
+
 // CREATE
 exports.createPost = async (req, res) => {
   const { text, author } = req.body;
