@@ -26,7 +26,7 @@ exports.getUserPosts = async (req, res) => {
 
 // FRIEND POSTS
 exports.getFriendsPosts = async (req, res) => {
-  const { userId } = req.body;
+  const { userId } = req.params;
   const user = await User.findById(userId);
   const friends = user.friends;
   const posts = await Post.find({
