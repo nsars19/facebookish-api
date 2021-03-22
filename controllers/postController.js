@@ -20,7 +20,15 @@ exports.showPost = async (req, res) => {
 // USER POSTS
 exports.getUserPosts = async (req, res) => {
   const { userId } = req.params;
-  const posts = await Post.find({ author: userId });
+  const posts = await Post.find({ author: userId })
+    .populate("author", { firstName: 1, lastName: 1 })
+    .populate({
+      path: "comments",
+      populate: {
+        path: "author",
+        model: "User",
+      },
+    });
   res.json(posts);
 };
 
