@@ -34,5 +34,6 @@ app.use(cors({ origin: "http://localhost:3001" }));
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/posts", postsRouter);
+app.use("/comments", commentsRouter);
 
 module.exports = app;
