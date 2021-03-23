@@ -55,4 +55,6 @@ exports.deleteComment = async (req, res) => {
   newUserComments.splice(userIdx, 1);
   user.comments = newUserComments;
   user.save();
+
+  res.json(postObj);
 };
