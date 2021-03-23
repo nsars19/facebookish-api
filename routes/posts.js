@@ -8,6 +8,6 @@ router.get("/byuser/:userId", postController.getUserPosts);
 router.get("/feed/:userId", postController.getFriendsPosts);
 router.post("/new", postController.createPost);
 router.put("/update/:postId", postController.updatePost);
-router.delete("/delete/:postId", postController.deletePost);
+router.delete("/delete", postController.deletePost);
 
 module.exports = router;
