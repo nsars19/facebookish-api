@@ -45,9 +45,9 @@ exports.deleteComment = async (req, res) => {
   const user = await User.findById(author);
 
   const postIdx = postObj.comments.indexOf(commentId);
-  const newPostComments = [...post.comments];
+  const newPostComments = [...postObj.comments];
   newPostComments.splice(postIdx, 1);
-  post.comments = newPostComments;
+  postObj.comments = newPostComments;
   postObj.save();
 
   const userIdx = user.comments.indexOf(commentId);
