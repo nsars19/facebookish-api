@@ -42,6 +42,10 @@ const UserSchema = new Schema({
     type: String,
     default: "public/images/profile/default.jpg",
   },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 UserSchema.plugin(uniqueValidator);
