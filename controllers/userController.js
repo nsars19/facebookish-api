@@ -27,6 +27,7 @@ exports.newUser = async (req, res) => {
     lastName,
     email,
     passwordHash,
+    createdAt: Date.now(),
   });
 
   user
