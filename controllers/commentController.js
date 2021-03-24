@@ -18,9 +18,13 @@ exports.getCommentsByUserId = async (req, res) => {
 // CREATE
 exports.createComment = async (req, res) => {
   const { post } = req.body;
+  const commentData = {
+    createdAt: Date.now(),
+    ...req.body,
+  };
 
   const postObj = await Post.findById(post);
-  const comment = new Comment(req.body);
+  const comment = new Comment(commentData);
   const savedComment = await comment.save();
 
   postObj.comments = postObj.comments.concat(savedComment._id);
