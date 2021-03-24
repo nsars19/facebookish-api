@@ -59,10 +59,11 @@ exports.createPost = async (req, res) => {
   const { text, author } = req.body;
 
   const user = await User.findById(author);
-
+  const createdAt = Date.now();
   const post = new Post({
     text,
     author,
+    createdAt,
   });
 
   const savedPost = await post.save();
