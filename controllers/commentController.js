@@ -15,6 +15,17 @@ exports.getCommentsByUserId = async (req, res) => {
   res.json(comments);
 };
 
+exports.getCommentById = async (req, res) => {
+  const { commentId } = req.params;
+
+  const comment = await Comment.findById(commentId).populate("author", {
+    firstName: 1,
+    lastName: 1,
+  });
+
+  res.send(comment);
+};
+
 // CREATE
 exports.createComment = async (req, res) => {
   const { post } = req.body;
