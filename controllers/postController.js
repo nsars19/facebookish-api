@@ -10,7 +10,7 @@ exports.getPosts = async (req, res) => {
 
 // SHOW
 exports.showPost = async (req, res) => {
-  const { postId } = req.body;
+  const { postId } = req.params;
 
   await Post.findById(postId)
     .then((result) => res.json(result))
