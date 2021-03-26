@@ -34,13 +34,52 @@ exports.createComment = async (req, res) => {
     ...req.body,
   };
 
-  const postObj = await Post.findById(post);
   const comment = new Comment(commentData);
-  const savedComment = await comment.save();
+  comment.save();
 
-  postObj.comments = postObj.comments.concat(savedComment._id);
-  postObj.save();
-  res.json(postObj);
+  const postObj = await Post.findById(post);
+  postObj.comments = [...postObj.comments].concat(comment._id);
+  await postObj.save();
+
+  const returnObj = await Post.findById(postObj._id).populate("comments");
+  console.log(returnObj);
+  res.send(returnObj);
+};
+
+exports.createChildComment = async (req, res) => {
+  const { text, post, author, comment, parentId } = req.body;
+  const data = {
+    createdAt: Date.now(),
+    text,
+    post,
+    author,
+    parentId,
+  };
+
+  const newComment = new Comment(data);
+  newComment.save();
+
+  await Comment.findById(comment).then((cmt) => {
+    cmt.comments = [...cmt.comments].concat(newComment._id);
+    cmt.save();
+  });
+
+  if (comment !== parentId) {
+    await Comment.findById(parentId).then((cmt) => {
+      cmt.comments = [...cmt.comments].concat(newComment._id);
+      cmt.save();
+    });
+  }
+
+  const returnObj = await Post.findById(post).populate({
+    path: "comments",
+    populate: {
+      path: "comments",
+      model: "Comment",
+    },
+  });
+
+  res.send(returnObj);
 };
 
 // UPDATE
@@ -53,17 +92,27 @@ exports.updateComment = async (req, res) => {
 
 // DELETE
 exports.deleteComment = async (req, res) => {
-  const { post, author, commentId } = req.body;
+  const { post, author, commentId, parentId } = req.body;
 
   await Comment.findByIdAndDelete(commentId);
+
   const postObj = await Post.findById(post);
   const user = await User.findById(author);
 
-  const postIdx = postObj.comments.indexOf(commentId);
-  const newPostComments = [...postObj.comments];
-  newPostComments.splice(postIdx, 1);
-  postObj.comments = newPostComments;
-  postObj.save();
+  if (parentId) {
+    const parentComment = await Comment.findById(parentId);
+    const cmtIdx = parentComment.comments.indexOf(commentId);
+    const newCmts = [...parentComment.comments];
+    newCmts.splice(cmtIdx, 1);
+    parentComment.comments = newCmts;
+    parentComment.save();
+  } else {
+    const postIdx = postObj.comments.indexOf(commentId);
+    const newPostComments = [...postObj.comments];
+    newPostComments.splice(postIdx, 1);
+    postObj.comments = newPostComments;
+    postObj.save();
+  }
 
   const userIdx = user.comments.indexOf(commentId);
   const newUserComments = [...user.comments];
