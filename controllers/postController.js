@@ -28,7 +28,19 @@ exports.getUserPosts = async (req, res) => {
         path: "author",
         model: "User",
       },
+    })
+    .populate({
+      path: "comments",
+      populate: {
+        path: "comments",
+        model: "Comment",
+        populate: {
+          path: "author",
+          model: "User",
+        },
+      },
     });
+
   res.json(posts);
 };
 
@@ -48,6 +60,17 @@ exports.getFriendsPosts = async (req, res) => {
       populate: {
         path: "author",
         model: "User",
+      },
+    })
+    .populate({
+      path: "comments",
+      populate: {
+        path: "comments",
+        model: "Comment",
+        populate: {
+          path: "author",
+          model: "User",
+        },
       },
     });
 
