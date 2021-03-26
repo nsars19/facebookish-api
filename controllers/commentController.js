@@ -120,5 +120,13 @@ exports.deleteComment = async (req, res) => {
   user.comments = newUserComments;
   user.save();
 
-  res.json(postObj);
+  const returnObj = await Post.findById(postObj._id).populate({
+    path: "comments",
+    populate: {
+      path: "comments",
+      model: "Comment",
+    },
+  });
+
+  res.json(returnObj);
 };
