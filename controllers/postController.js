@@ -98,9 +98,9 @@ exports.createPost = async (req, res) => {
 
 // UPDATE
 exports.updatePost = async (req, res) => {
-  const { postId, newInfo } = req.body;
+  const { postId, newData } = req.body;
 
-  const post = await Post.findByIdAndUpdate(postId, newInfo);
+  const post = await Post.findByIdAndUpdate(postId, newData);
   const savedPost = await post.save();
 
   res.json(savedPost);

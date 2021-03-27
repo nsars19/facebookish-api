@@ -84,9 +84,9 @@ exports.createChildComment = async (req, res) => {
 
 // UPDATE
 exports.updateComment = async (req, res) => {
-  const { newText, commentId } = req.body;
+  const { newData, commentId } = req.body;
 
-  const comment = await Comment.findByIdAndUpdate(commentId, newText);
+  const comment = await Comment.findByIdAndUpdate(commentId, newData);
   res.json(comment);
 };
 
