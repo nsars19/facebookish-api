@@ -100,10 +100,31 @@ exports.createPost = async (req, res) => {
 exports.updatePost = async (req, res) => {
   const { postId, newData } = req.body;
 
-  const post = await Post.findByIdAndUpdate(postId, newData);
-  const savedPost = await post.save();
+  const post = await Post.findByIdAndUpdate(postId, { text: newData });
+  await post.save();
 
-  res.json(savedPost);
+  const returnObj = await Post.findById(postId)
+    .populate("author")
+    .populate({
+      path: "comments",
+      populate: {
+        path: "comments",
+        model: "Comment",
+        populate: {
+          path: "author",
+          model: "User",
+        },
+      },
+    })
+    .populate({
+      path: "comments",
+      populate: {
+        path: "author",
+        model: "User",
+      },
+    });
+
+  res.json(returnObj);
 };
 
 // DELETE
