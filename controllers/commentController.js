@@ -86,8 +86,11 @@ exports.createChildComment = async (req, res) => {
 exports.updateComment = async (req, res) => {
   const { newData, commentId } = req.body;
 
-  const comment = await Comment.findByIdAndUpdate(commentId, newData);
-  res.json(comment);
+  const comment = await Comment.findByIdAndUpdate(commentId, { text: newData });
+  await comment.save();
+  const returnObj = await Comment.findById(commentId);
+
+  res.json(returnObj);
 };
 
 // DELETE
