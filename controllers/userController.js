@@ -10,9 +10,14 @@ exports.getUsers = async (req, res, next) => {
 exports.findUser = async (req, res, next) => {
   const { userId } = req.params;
 
-  await User.findById(userId)
+  const user = await User.findById(userId)
+    .populate("pendingFriends", {
+      firstName: 1,
+      lastName: 1,
+      profilePhotoSrc: 1,
+    })
     .then((user) => res.json(user))
-    .catch((err) => res.json({ message: "User not found." }));
+    .catch((err) => res.json(err));
 };
 
 // CREATE
