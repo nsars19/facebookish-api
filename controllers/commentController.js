@@ -42,7 +42,6 @@ exports.createComment = async (req, res) => {
   await postObj.save();
 
   const returnObj = await Post.findById(postObj._id).populate("comments");
-  console.log(returnObj);
   res.send(returnObj);
 };
 
