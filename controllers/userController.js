@@ -10,7 +10,7 @@ exports.getUsers = async (req, res, next) => {
 exports.findUser = async (req, res, next) => {
   const { userId } = req.params;
 
-  const user = await User.findById(userId)
+  await User.findById(userId)
     .populate("pendingFriends", {
       firstName: 1,
       lastName: 1,
