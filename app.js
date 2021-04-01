@@ -39,5 +39,6 @@ app.use("/posts", postsRouter);
 app.use("/comments", commentsRouter);
 app.use("/profiledata", profileDataRouter);
 app.use("/likes", likeRouter);
+app.use("/friends", friendRouter);
 
 module.exports = app;
