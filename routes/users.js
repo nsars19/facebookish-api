@@ -4,6 +4,7 @@ const userController = require("../controllers/userController");
 
 /* GET users listing. */
 router.get("/", userController.getUsers);
+router.get("/find-users/:userId", userController.getDisconnectedUsers);
 router.get("/:userId", userController.findUser);
 router.post("/new", userController.newUser);
 router.put("/update", userController.updateUser);
