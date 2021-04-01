@@ -6,6 +6,21 @@ exports.getUsers = async (req, res, next) => {
   await User.find({}).then((users) => res.json(users));
 };
 
+exports.getDisconnectedUsers = async (req, res) => {
+  const { userId } = req.params;
+  const user = await User.findById(userId);
+  const sent = await User.find({ pendingFriends: userId });
+
+  const disqualified = user.friends
+    .concat(user.pendingFriends)
+    .concat(sent.map((user) => user._id))
+    .concat(userId);
+
+  await User.find({ _id: { $nin: disqualified } })
+    .then((data) => res.send(data))
+    .catch((err) => res.send(err));
+};
+
 // SHOW
 exports.findUser = async (req, res, next) => {
   const { userId } = req.params;
