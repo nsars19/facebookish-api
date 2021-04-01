@@ -26,11 +26,6 @@ exports.findUser = async (req, res, next) => {
   const { userId } = req.params;
 
   await User.findById(userId)
-    .populate("pendingFriends", {
-      firstName: 1,
-      lastName: 1,
-      profilePhotoSrc: 1,
-    })
     .then((user) => res.json(user))
     .catch((err) => res.json(err));
 };
