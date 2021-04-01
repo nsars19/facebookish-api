@@ -83,7 +83,6 @@ exports.getFriendsPosts = async (req, res) => {
 exports.createPost = async (req, res) => {
   const { homeFeed, text, author } = req.body;
 
-  const user = await User.findById(author);
   const createdAt = Date.now();
   const post = new Post({
     text,
@@ -92,10 +91,11 @@ exports.createPost = async (req, res) => {
   });
 
   const savedPost = await post.save();
-  user.posts = user.posts.concat(savedPost._id);
-  await user.save();
 
-  // res.json(savedPost);
+  await User.findByIdAndUpdate(author, {
+    $push: { posts: savedPost._id },
+  });
+
   if (homeFeed) {
     this.getFriendsPosts({ params: { userId: author } }, res);
   } else {
