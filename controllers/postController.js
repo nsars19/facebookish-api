@@ -81,7 +81,7 @@ exports.getFriendsPosts = async (req, res) => {
 
 // CREATE
 exports.createPost = async (req, res) => {
-  const { text, author } = req.body;
+  const { homeFeed, text, author } = req.body;
 
   const user = await User.findById(author);
   const createdAt = Date.now();
@@ -95,7 +95,12 @@ exports.createPost = async (req, res) => {
   user.posts = user.posts.concat(savedPost._id);
   await user.save();
 
-  res.json(savedPost);
+  // res.json(savedPost);
+  if (homeFeed) {
+    this.getFriendsPosts({ params: { userId: author } }, res);
+  } else {
+    this.getUserPosts({ params: { userId: author } }, res);
+  }
 };
 
 // UPDATE
