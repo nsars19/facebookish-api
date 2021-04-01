@@ -34,3 +34,31 @@ exports.addFriend = async (req, res) => {
     res.send(receiver.pendingFriends);
   }
 };
+
+exports.acceptRequest = async (req, res) => {
+  const { senderId, accepterId } = req.body;
+
+  const sender = await User.findByIdAndUpdate(senderId, {
+    $push: { friends: accepterId },
+    $pull: { pendingFriends: accepterId },
+  }).catch((err) => res.send(err));
+
+  const accepter = await User.findByIdAndUpdate(accepterId, {
+    $push: { friends: senderId },
+    $pull: { pendingFriends: senderId },
+  }).catch((err) => res.send(err));
+
+  res.sendStatus(200);
+};
+
+exports.denyRequest = async (req, res) => {
+  const { senderId, denierId } = req.body;
+
+  await User.findByIdAndUpdate(denierId, {
+    $pull: { pendingFriends: senderId },
+  })
+    .then((result) => {
+      res.sendStatus(200);
+    })
+    .catch((err) => res.send(err));
+};
