@@ -72,7 +72,8 @@ exports.getFriendsPosts = async (req, res) => {
           model: "User",
         },
       },
-    });
+    })
+    .sort({ createdAt: "descending" });
 
   res.json(posts);
 };
