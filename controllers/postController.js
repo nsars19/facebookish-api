@@ -133,15 +133,11 @@ exports.updatePost = async (req, res) => {
 exports.deletePost = async (req, res) => {
   const { postId, userId } = req.body;
 
-  const user = await User.findById(userId);
-  const postIdx = user.posts.indexOf(postId);
-  const updatedPosts = [...user.posts];
-  updatedPosts.splice(postIdx, 1);
-  user.posts = updatedPosts;
+  await Post.deleteOne({ _id: postId })
+    .then((result) => res.sendStatus(200))
+    .catch((err) => res.send(err));
 
-  await user.save();
-
-  await Post.findByIdAndDelete(postId)
-    .then((result) => res.json(result))
-    .catch((err) => res.json(err));
+  await User.findByIdAndUpdate(userId, {
+    $pull: { posts: postId },
+  }).catch((err) => console.log(err));
 };
