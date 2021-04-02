@@ -23,6 +23,7 @@ const postsRouter = require("./routes/posts");
 const commentsRouter = require("./routes/comments");
 const profileDataRouter = require("./routes/profileData");
 const likeRouter = require("./routes/likes");
+const friendRouter = require("./routes/friends");
 
 const app = express();
 
