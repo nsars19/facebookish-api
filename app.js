@@ -7,6 +7,7 @@ const User = require("./models/user");
 const Post = require("./models/post");
 const Comment = require("./models/comment");
 const cors = require("cors");
+const fs = require("fs");
 
 // Setup MongoDB
 const mongoose = require("mongoose");
