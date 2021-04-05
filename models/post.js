@@ -6,6 +6,7 @@ const PostSchema = new Schema({
   author: { type: Schema.Types.ObjectId, ref: "User", required: true },
   comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
   likes: [{ type: Schema.Types.ObjectId, ref: "Like" }],
+  photo: { type: Schema.Types.ObjectId, ref: "Photo" },
   createdAt: {
     type: Date,
     default: Date.now,
