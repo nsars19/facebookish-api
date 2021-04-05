@@ -15,6 +15,7 @@ async function uploadImage(req, res, next) {
 // BUILD MONGO DOCUMENT & SAVE
 async function buildPhoto(req, res, next) {
   const { originalname, destination, filename, path } = req.file;
+  const { imgPath, userId } = req.params;
 
   const photo = new Photo({
     originalname,
