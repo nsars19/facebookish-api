@@ -43,3 +43,11 @@ async function buildPost(req, res, next) {
   photoItem.set({});
   postController.getFriendsPosts(req, res);
 }
+
+async function handleProfilePictureChange(userId, res) {
+  const path = photoItem.get().path;
+
+  await User.findByIdAndUpdate(userId, { profilePhotoSrc: path }, { new: true })
+    .then((user) => res.send({ src: user.profilePhotoSrc }))
+    .catch((err) => res.send(err));
+}
