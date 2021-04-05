@@ -1,7 +1,9 @@
 const Post = require("./../models/post");
 const Photo = require("./../models/photo");
+const User = require("./../models/user");
 const photoItem = require("./../utils/storage")();
 const upload = require("./../utils/uploads");
+const postController = require("./../controllers/postController");
 
 exports.handleUpload = [uploadImage, buildPhoto, buildPost];
 
