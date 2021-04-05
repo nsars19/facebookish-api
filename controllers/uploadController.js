@@ -25,7 +25,12 @@ async function buildPhoto(req, res, next) {
 
   photo.save();
   photoItem.set(photo);
-  next();
+
+  if (imgPath === "profile") {
+    handleProfilePictureChange(userId, res);
+  } else {
+    next();
+  }
 }
 
 // BUILD MONGO DOCUMENT, SAVE, AND HANDLE RESPONSE
