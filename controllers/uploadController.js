@@ -41,5 +41,5 @@ async function buildPost(req, res, next) {
 
   post.save();
   photoItem.set({});
-  res.send({ path: req.file.path });
+  postController.getFriendsPosts(req, res);
 }
