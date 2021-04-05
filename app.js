@@ -25,6 +25,7 @@ const commentsRouter = require("./routes/comments");
 const profileDataRouter = require("./routes/profileData");
 const likeRouter = require("./routes/likes");
 const friendRouter = require("./routes/friends");
+const uploadRouter = require("./routes/uploads");
 
 const app = express();
 
@@ -42,5 +43,6 @@ app.use("/comments", commentsRouter);
 app.use("/profiledata", profileDataRouter);
 app.use("/likes", likeRouter);
 app.use("/friends", friendRouter);
+app.use("/upload", uploadRouter);
 
 module.exports = app;
