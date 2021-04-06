@@ -21,7 +21,7 @@ exports.showPost = async (req, res) => {
 exports.getUserPosts = async (req, res) => {
   const { userId } = req.params;
   const posts = await Post.find({ author: userId })
-    .populate("author", { firstName: 1, lastName: 1 })
+    .populate("author", { firstName: 1, lastName: 1, profilePhotoSrc: 1 })
     .populate({
       path: "comments",
       populate: {
@@ -56,7 +56,7 @@ exports.getFriendsPosts = async (req, res) => {
       $in: friends,
     },
   })
-    .populate("author", { firstName: 1, lastName: 1 })
+    .populate("author", { firstName: 1, lastName: 1, profilePhotoSrc: 1 })
     .populate({
       path: "comments",
       populate: {
