@@ -3,6 +3,19 @@ const User = require("./../models/user");
 const Comment = require("./../models/comment");
 const Notification = require("./../models/notification");
 
+exports.getNotifications = async (req, res) => {
+  const { userId } = req.params;
+
+  await Notification.find({
+    user: userId,
+    readStatus: false,
+  })
+    .populate("sender", { firstName: 1, lastName: 1, profilePhotoSrc: 1 })
+    .sort({ createdAt: "descending" })
+    .then((data) => res.send(data))
+    .catch((err) => res.send(err));
+};
+
 exports.createNotification = (notification) => {
   return async (req, res, next) => {
     const [mainType, subType] = notification.type.split("/");
