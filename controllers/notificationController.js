@@ -65,7 +65,7 @@ async function handleRequestNotification(subType, reqBody) {
 async function createPostCommentNotification(reqBody) {
   const { author, post } = reqBody;
 
-  const postItem = await Post.findById(post).populate("author", { _id: 1 });
+  const postItem = await Post.findById(post);
 
   // Prevent the user from sending themselves a notification
   if (postItem.author.toString() === author) return;
