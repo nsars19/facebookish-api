@@ -68,7 +68,7 @@ async function createPostCommentNotification(reqBody) {
   const postItem = await Post.findById(post).populate("author", { _id: 1 });
 
   // Prevent the user from sending themselves a notification
-  if (postItem.author === author) return;
+  if (postItem.author.toString() === author) return;
 
   new Notification({
     user: postItem.author._id,
@@ -83,7 +83,7 @@ async function createPostLikeNotification(reqBody) {
 
   const postItem = await Post.findById(post);
 
-  if (postItem.author === user) return;
+  if (postItem.author.toString() === user) return;
 
   new Notification({
     user: postItem.author,
@@ -98,7 +98,7 @@ async function createCommentCommentNotification(reqBody) {
 
   const commentItem = await Comment.findById(comment);
 
-  if (commentItem.author === author) return;
+  if (commentItem.author.toString() === author) return;
 
   new Notification({
     user: commentItem.author,
@@ -113,7 +113,7 @@ async function createCommentLikeNotification(reqBody) {
 
   const commentItem = await Comment.findById(comment);
 
-  if (commentItem.author === user) return;
+  if (commentItem.author.toString() === user) return;
 
   new Notification({
     user: commentItem.author,
