@@ -37,9 +37,9 @@ exports.createComment = async (req, res) => {
   const comment = new Comment(commentData);
   comment.save();
 
-  const postObj = await Post.findById(post);
-  postObj.comments = [...postObj.comments].concat(comment._id);
-  await postObj.save();
+  const postObj = await Post.findByIdAndUpdate(post, {
+    $push: { comments: comment._id },
+  });
 
   const returnObj = await Post.findById(postObj._id).populate("comments");
   res.send(returnObj);
