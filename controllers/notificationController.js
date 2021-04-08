@@ -74,6 +74,7 @@ async function createPostCommentNotification(reqBody) {
     user: postItem.author._id,
     notificationType: "post/comment",
     sender: author,
+    createdAt: Date.now(),
   }).save();
 }
 
@@ -88,6 +89,7 @@ async function createPostLikeNotification(reqBody) {
     user: postItem.author,
     notificationType: "post/like",
     sender: user,
+    createdAt: Date.now(),
   }).save();
 }
 
@@ -102,6 +104,7 @@ async function createCommentCommentNotification(reqBody) {
     user: commentItem.author,
     notificationType: "comment/comment",
     sender: author,
+    createdAt: Date.now(),
   }).save();
 }
 
@@ -116,6 +119,7 @@ async function createCommentLikeNotification(reqBody) {
     user: commentItem.author,
     notificationType: "comment/like",
     sender: user,
+    createdAt: Date.now(),
   }).save();
 }
 
@@ -126,6 +130,7 @@ async function createAddRequestNotification(reqBody) {
     user: receiverId,
     notificationType: "friendRequest/add",
     sender: senderId,
+    createdAt: Date.now(),
   }).save();
 }
 
@@ -136,5 +141,6 @@ async function createAcceptRequestNotification(reqBody) {
     user: senderId,
     notificationType: "friendRequest/accept",
     sender: accepterId,
+    createdAt: Date.now(),
   }).save();
 }
