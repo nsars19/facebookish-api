@@ -38,3 +38,19 @@ exports.likeComment = async (req, res) => {
     .then((data) => res.send(commentObj))
     .catch((error) => res.send(error));
 };
+
+exports.getLike = async (req, res, next) => {
+  const { user, post, comment } = req.body;
+
+  if (post) {
+    const postItem = await Post.findById(post);
+    req.unliked = postItem.likes.includes(user) ? true : false;
+  }
+
+  if (comment) {
+    const commentItem = await Comment.findById(comment);
+    req.unliked = commentItem.likes.includes(user) ? true : false;
+  }
+
+  next();
+};
