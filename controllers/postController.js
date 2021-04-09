@@ -110,7 +110,6 @@ exports.updatePost = async (req, res) => {
   const { postId, newData } = req.body;
 
   const post = await Post.findByIdAndUpdate(postId, { text: newData });
-  await post.save();
 
   const returnObj = await Post.findById(postId)
     .populate("author")
