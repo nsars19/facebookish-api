@@ -16,6 +16,18 @@ exports.getNotifications = async (req, res) => {
     .catch((err) => res.send(err));
 };
 
+exports.markComplete = async (req, res) => {
+  const { notifId, userId } = req.body;
+
+  await Notification.findByIdAndUpdate(notifId, { readStatus: true });
+
+  await Notification.find({ user: userId, readStatus: false })
+    .populate("sender", { firstName: 1, lastName: 1, profilePhotoSrc: 1 })
+    .sort({ createdAt: "descending" })
+    .then((data) => res.send(data))
+    .catch((err) => res.send(err));
+};
+
 exports.createNotification = (notification) => {
   return async (req, res, next) => {
     const [mainType, subType] = notification.type.split("/");
