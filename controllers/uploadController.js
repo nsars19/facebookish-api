@@ -42,7 +42,7 @@ async function buildPost(req, res, next) {
   const { userId } = req.params;
 
   const post = new Post({
-    text,
+    text: text || " ",
     author: userId,
     photo: photoItem.get()._id,
   });
