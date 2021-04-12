@@ -29,9 +29,13 @@ exports.addFriend = async (req, res) => {
   if (receiver.pendingFriends.includes(senderId)) {
     res.send(receiver.pendingFriends);
   } else {
-    receiver.pendingFriends = [...receiver.pendingFriends].concat(senderId);
-    receiver.save();
-    res.send(receiver.pendingFriends);
+    const newRec = await User.findByIdAndUpdate(
+      receiverId,
+      { $push: { pendingFriends: senderId } },
+      { new: true }
+    );
+
+    res.send(newRec.pendingFriends);
   }
 };
 
