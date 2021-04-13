@@ -29,11 +29,9 @@ async function buildPhoto(req, res, next) {
   photo.save();
   photoItem.set(photo);
 
-  if (imgPath === "profile") {
-    handleProfilePictureChange(userId, res);
-  } else {
-    next();
-  }
+  if (imgPath === "banner") handleBannerChange(userId, res);
+  else if (imgPath === "profile") handleProfilePictureChange(userId, res);
+  else next();
 }
 
 // BUILD MONGO DOCUMENT, SAVE, AND HANDLE RESPONSE
@@ -57,5 +55,13 @@ async function handleProfilePictureChange(userId, res) {
 
   await User.findByIdAndUpdate(userId, { profilePhotoSrc: path }, { new: true })
     .then((user) => res.send({ src: user.profilePhotoSrc }))
+    .catch((err) => res.send(err));
+}
+
+async function handleBannerChange(userId, res) {
+  const path = photoItem.get().path;
+
+  await User.findByIdAndUpdate(userId, { bannerSrc: path }, { new: true })
+    .then((user) => res.send({ src: user.bannerSrc }))
     .catch((err) => res.send(err));
 }
