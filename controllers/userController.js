@@ -47,7 +47,14 @@ exports.newUser = async (req, res) => {
 
   user
     .save()
-    .then((user) => res.json(user))
+    .then((user) => {
+      const token = jwt.sign(
+        { email: user.email, id: user._id },
+        process.env.TOKEN_SECRET
+      );
+
+      res.json({ token, user: user._id });
+    })
     .catch((err) => res.json(err.message));
 };
 
