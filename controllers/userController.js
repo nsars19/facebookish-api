@@ -24,8 +24,15 @@ exports.getDisconnectedUsers = async (req, res) => {
 // SHOW
 exports.findUser = async (req, res, next) => {
   const { userId } = req.params;
+  const userOptions = {
+    firstName: 1,
+    lastName: 1,
+    profilePhotoSrc: 1,
+    bannerSrc: 1,
+  };
 
   await User.findById(userId)
+    .populate("friends", userOptions)
     .then((user) => res.json(user))
     .catch((err) => res.json(err));
 };
