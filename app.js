@@ -27,6 +27,7 @@ const likeRouter = require("./routes/likes");
 const friendRouter = require("./routes/friends");
 const uploadRouter = require("./routes/uploads");
 const notificationRouter = require("./routes/notifications");
+const loginRouter = require("./routes/login");
 
 const app = express();
 
@@ -47,5 +48,6 @@ app.use("/likes", likeRouter);
 app.use("/friends", friendRouter);
 app.use("/upload", uploadRouter);
 app.use("/notifications", notificationRouter);
+app.use("/login", loginRouter);
 
 module.exports = app;
