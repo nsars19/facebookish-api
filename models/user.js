@@ -52,6 +52,13 @@ const UserSchema = new Schema({
   },
 });
 
+UserSchema.methods = {
+  setDefaultFriend: function () {
+    // Adds Tom as a default friend. Like Myspace.
+    this.friends = this.friends.concat("60777df2c4938a08b87f8f29");
+  },
+};
+
 UserSchema.plugin(uniqueValidator);
 
 module.exports = mongoose.model("User", UserSchema);
