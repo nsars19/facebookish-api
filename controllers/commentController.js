@@ -1,6 +1,8 @@
 const Post = require("./../models/post");
 const User = require("./../models/user");
 const Comment = require("./../models/comment");
+const jwt = require("jsonwebtoken");
+const getTokenFromRequest = require("./../utils/getToken");
 
 // SHOW
 exports.getCommentsByPostId = async (req, res) => {
@@ -28,17 +30,30 @@ exports.getCommentById = async (req, res) => {
 
 // CREATE
 exports.createComment = async (req, res) => {
-  const { post } = req.body;
+  const { post, text } = req.body;
+
+  const token = getTokenFromRequest(req);
+  const decodedToken = jwt.verify(token, process.env.TOKEN_SECRET);
+
+  if (!token || !decodedToken.id) {
+    res.sendStatus(401);
+  }
+
+  const author = decodedToken.id;
   const commentData = {
     createdAt: Date.now(),
-    ...req.body,
+    post,
+    text,
+    author,
   };
 
   const comment = new Comment(commentData);
   comment.save();
 
-  const postObj = await Post.findByIdAndUpdate(post, {
-    $push: { comments: comment._id },
+  const postObj = await Post.findByIdAndUpdate(
+    post,
+    {
+      $push: { comments: comment._id },
     },
     { new: true }
   )
@@ -50,7 +65,16 @@ exports.createComment = async (req, res) => {
 };
 
 exports.createChildComment = async (req, res) => {
-  const { text, post, author, comment, parentId } = req.body;
+  const { text, post, comment, parentId } = req.body;
+
+  const token = getTokenFromRequest(req);
+  const decodedToken = jwt.verify(token, process.env.TOKEN_SECRET);
+
+  if (!token || !decodedToken) {
+    res.sendStatus(401);
+  }
+
+  const author = decodedToken.id;
   const data = {
     createdAt: Date.now(),
     text,
