@@ -124,10 +124,17 @@ exports.updateComment = async (req, res) => {
 exports.deleteComment = async (req, res) => {
   const { post, author, commentId, parentId } = req.body;
 
+  const token = getTokenFromRequest(req);
+  const decodedToken = jwt.verify(token, process.env.TOKEN_SECRET);
+
+  if (!token || !decodedToken.id) {
+    res.sendStatus(401);
+  }
+
   await Comment.findByIdAndDelete(commentId);
 
   const postObj = await Post.findById(post);
-  const user = await User.findById(author);
+  const user = await User.findById(decodedToken.id);
 
   if (parentId) {
     const parentComment = await Comment.findById(parentId);
