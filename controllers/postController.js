@@ -147,13 +147,20 @@ exports.updatePost = async (req, res) => {
 
 // DELETE
 exports.deletePost = async (req, res) => {
-  const { postId, userId } = req.body;
+  const { postId } = req.body;
+
+  const token = getTokenFromRequest(req);
+  const decodedToken = jwt.verify(token, process.env.TOKEN_SECRET);
+
+  if (!token || !decodedToken.id) {
+    res.sendStatus(401);
+  }
 
   await Post.deleteOne({ _id: postId })
     .then((result) => res.sendStatus(200))
     .catch((err) => res.send(err));
 
-  await User.findByIdAndUpdate(userId, {
+  await User.findByIdAndUpdate(decodedToken.id, {
     $pull: { posts: postId },
   }).catch((err) => console.log(err));
 };
