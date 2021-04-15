@@ -4,8 +4,21 @@ const User = require("./../models/user");
 const photoItem = require("./../utils/storage")();
 const upload = require("./../utils/uploads");
 const postController = require("./../controllers/postController");
+const jwt = require("jsonwebtoken");
+const getTokenFromRequest = require("./../utils/getToken");
 
-exports.handleUpload = [uploadImage, buildPhoto, buildPost];
+exports.handleUpload = [verifyToken, uploadImage, buildPhoto, buildPost];
+
+async function verifyToken(req, res, next) {
+  const token = getTokenFromRequest(req);
+  const decodedToken = jwt.verify(token, process.env.TOKEN_SECRET);
+
+  if (!token || !decodedToken.id) {
+    res.sendStatus(401);
+  } else {
+    next();
+  }
+}
 
 async function uploadImage(req, res, next) {
   upload(req, res, (err) => {
