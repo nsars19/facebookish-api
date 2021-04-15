@@ -1,5 +1,7 @@
 const Post = require("./../models/post");
 const User = require("./../models/user");
+const jwt = require("jsonwebtoken");
+const getTokenFromRequest = require("./../utils/getToken");
 
 // INDEX
 exports.getPosts = async (req, res) => {
@@ -83,8 +85,16 @@ exports.getFriendsPosts = async (req, res) => {
 
 // CREATE
 exports.createPost = async (req, res) => {
-  const { homeFeed, text, author } = req.body;
+  const { homeFeed, text } = req.body;
 
+  const token = getTokenFromRequest(req);
+  const decodedToken = jwt.verify(token, process.env.TOKEN_SECRET);
+
+  if (!token || !decodedToken.id) {
+    res.sendStatus(401);
+  }
+
+  const author = decodedToken.id;
   const createdAt = Date.now();
   const post = new Post({
     text,
