@@ -53,6 +53,8 @@ exports.newUser = async (req, res) => {
     createdAt: Date.now(),
   });
 
+  user.setDefaultFriend();
+
   user
     .save()
     .then((user) => {
