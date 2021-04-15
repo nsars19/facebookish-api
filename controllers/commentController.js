@@ -39,10 +39,14 @@ exports.createComment = async (req, res) => {
 
   const postObj = await Post.findByIdAndUpdate(post, {
     $push: { comments: comment._id },
-  });
-
-  const returnObj = await Post.findById(postObj._id).populate("comments");
-  res.send(returnObj);
+    },
+    { new: true }
+  )
+    .populate("comments")
+    .then((post) => {
+      res.send(post);
+    })
+    .catch((err) => res.send(err));
 };
 
 exports.createChildComment = async (req, res) => {
