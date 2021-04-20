@@ -65,7 +65,11 @@ exports.newUser = async (req, res) => {
 
       res.json({ token, user: user._id });
     })
-    .catch((err) => res.json(err.message));
+    .catch((err) => {
+      if (err._message === "User validation failed") {
+        res.json({ error: true, message: "This email is already in use." });
+      }
+    });
 };
 
 // UPDATE
