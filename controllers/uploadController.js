@@ -50,7 +50,8 @@ async function uploadToS3(req, res, next) {
 }
 
 async function unlink(req, res, next) {
-  unlinkFile(req.file.path);
+  await unlinkFile(req.file.path);
+  fs.rmdirSync(req.file.destination);
   next();
 }
 
