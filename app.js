@@ -8,7 +8,7 @@ const helmet = require("helmet");
 
 // Setup MongoDB
 const mongoose = require("mongoose");
-const mongoDB = `${process.env.MONGODB_URI}`;
+const mongoDB = process.env.MONGODB_URI;
 mongoose
   .connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true })
   .catch((err) => console.log(err));
