@@ -42,7 +42,7 @@ exports.getUserPosts = async (req, res) => {
         },
       },
     })
-    .populate("photo", { path: 1 })
+    .populate("photo", { path: 1, key: 1 })
     .sort({ createdAt: "descending" });
 
   res.json(posts);
@@ -77,7 +77,7 @@ exports.getFriendsPosts = async (req, res) => {
         },
       },
     })
-    .populate("photo", { path: 1 })
+    .populate("photo", { path: 1, key: 1 })
     .sort({ createdAt: "descending" });
 
   res.json(posts);
