@@ -6,8 +6,19 @@ const upload = require("./../utils/uploads");
 const postController = require("./../controllers/postController");
 const jwt = require("jsonwebtoken");
 const getTokenFromRequest = require("./../utils/getToken");
+const { uploadFile } = require("./../s3");
+const fs = require("fs");
+const util = require("util");
+const unlinkFile = util.promisify(fs.unlink);
 
-exports.handleUpload = [verifyToken, uploadImage, buildPhoto, buildPost];
+exports.handleUpload = [
+  verifyToken,
+  uploadImage,
+  uploadToS3,
+  unlink,
+  buildPhoto,
+  buildPost,
+];
 
 async function verifyToken(req, res, next) {
   const token = getTokenFromRequest(req);
@@ -27,15 +38,31 @@ async function uploadImage(req, res, next) {
   });
 }
 
+async function uploadToS3(req, res, next) {
+  const result = await uploadFile(req.file);
+  const key = result.key;
+  const location = result.Location;
+
+  // Attach returned s3 info to file object
+  req.file = { ...req.file, key, location };
+  console.log(req.file);
+  next();
+}
+
+async function unlink(req, res, next) {
+  unlinkFile(req.file.path);
+  next();
+}
+
 // BUILD MONGO DOCUMENT & SAVE
 async function buildPhoto(req, res, next) {
-  const { originalname, destination, filename, path } = req.file;
+  const { originalname, location, key, path } = req.file;
   const { imgPath, userId } = req.params;
 
   const photo = new Photo({
     originalname,
-    destination,
-    filename,
+    location,
+    key,
     path,
   });
 
@@ -64,7 +91,7 @@ async function buildPost(req, res, next) {
 }
 
 async function handleProfilePictureChange(userId, res) {
-  const path = photoItem.get().path;
+  const path = photoItem.get().key;
 
   await User.findByIdAndUpdate(userId, { profilePhotoSrc: path }, { new: true })
     .then((user) => res.send({ src: user.profilePhotoSrc }))
@@ -72,7 +99,7 @@ async function handleProfilePictureChange(userId, res) {
 }
 
 async function handleBannerChange(userId, res) {
-  const path = photoItem.get().path;
+  const path = photoItem.get().key;
 
   await User.findByIdAndUpdate(userId, { bannerSrc: path }, { new: true })
     .then((user) => res.send({ src: user.bannerSrc }))
