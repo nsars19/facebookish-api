@@ -9,7 +9,9 @@ const helmet = require("helmet");
 // Setup MongoDB
 const mongoose = require("mongoose");
 const mongoDB = `${process.env.MONGO_URI}`;
-mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose
+  .connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true })
+  .catch((err) => console.log(err));
 
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
