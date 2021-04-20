@@ -40,11 +40,11 @@ const UserSchema = new Schema({
   pendingFriends: [{ type: Schema.Types.ObjectId, ref: "User" }],
   bannerSrc: {
     type: String,
-    default: "public/images/banner/default.png",
+    default: "defaultBanner.png",
   },
   profilePhotoSrc: {
     type: String,
-    default: "public/images/profile/default.jpg",
+    default: "defaultProfile.jpg",
   },
   createdAt: {
     type: Date,
