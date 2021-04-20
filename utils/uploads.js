@@ -5,8 +5,8 @@ const path = require("path");
 // Setup Multer
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const { userId, imgPath } = req.params;
-    const path = `public/images/${imgPath}/${userId}`;
+    const { userId } = req.params;
+    const path = `public/images/${userId}`;
     makeDir(path);
     return cb(null, path);
   },
