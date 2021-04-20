@@ -28,6 +28,7 @@ const friendRouter = require("./routes/friends");
 const uploadRouter = require("./routes/uploads");
 const notificationRouter = require("./routes/notifications");
 const loginRouter = require("./routes/login");
+const imageRouter = require("./routes/images");
 
 const app = express();
 
@@ -49,5 +50,6 @@ app.use("/friends", friendRouter);
 app.use("/upload", uploadRouter);
 app.use("/notifications", notificationRouter);
 app.use("/login", loginRouter);
+app.use("/images", imageRouter);
 
 module.exports = app;
