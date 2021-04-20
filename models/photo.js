@@ -3,8 +3,8 @@ const { Schema } = mongoose;
 
 const PhotoSchema = new Schema({
   originalname: String,
-  destination: String,
-  filename: String,
+  location: String,
+  key: String,
   path: String,
   createdAt: {
     type: Date,
