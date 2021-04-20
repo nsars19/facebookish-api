@@ -3,11 +3,8 @@ const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
-const User = require("./models/user");
-const Post = require("./models/post");
-const Comment = require("./models/comment");
 const cors = require("cors");
-const fs = require("fs");
+const helmet = require("helmet");
 
 // Setup MongoDB
 const mongoose = require("mongoose");
@@ -32,6 +29,7 @@ const imageRouter = require("./routes/images");
 
 const app = express();
 
+app.use(helmet());
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
