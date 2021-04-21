@@ -45,7 +45,7 @@ async function uploadToS3(req, res, next) {
 
   // Attach returned s3 info to file object
   req.file = { ...req.file, key, location };
-  console.log(req.file);
+
   next();
 }
 
