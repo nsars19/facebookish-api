@@ -42,8 +42,11 @@ async function uploadImage(req, res, next) {
 
 async function processImage(req, res, next) {
   const { file } = req;
-  const originalFileName = file.originalname.split(".")[0];
-  const updatedFileName = `${originalFileName}.jpeg`;
+  const [originalFileName, originalExtention] = file.originalname.split(".");
+  const updatedFileName =
+    originalExtention === "jpeg"
+      ? `${originalFileName}2.jpeg`
+      : `${originalFileName}.jpeg`;
   const newPath = file.destination + "/" + updatedFileName;
 
   const newImageFile = await sharp(file.path)
