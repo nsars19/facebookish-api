@@ -10,10 +10,12 @@ const { uploadFile } = require("./../s3");
 const fs = require("fs");
 const util = require("util");
 const unlinkFile = util.promisify(fs.unlink);
+const sharp = require("sharp");
 
 exports.handleUpload = [
   verifyToken,
   uploadImage,
+  processImage,
   uploadToS3,
   unlink,
   buildPhoto,
@@ -38,6 +40,33 @@ async function uploadImage(req, res, next) {
   });
 }
 
+async function processImage(req, res, next) {
+  const { file } = req;
+  const originalFileName = file.originalname.split(".")[0];
+  const updatedFileName = `${originalFileName}.jpeg`;
+  const newPath = file.destination + "/" + updatedFileName;
+
+  const newImageFile = await sharp(file.path)
+    .jpeg({ mozjpeg: true, quality: 80 })
+    .toFile(newPath, (err, info) => {
+      if (err) res.send(err);
+    })
+    .toBuffer();
+
+  req.file = {
+    fieldname: "file",
+    originalname: req.file.originalname,
+    encoding: req.file.encoding,
+    mimetype: "image/jpeg",
+    destination: req.file.destination,
+    filename: updatedFileName,
+    path: newPath,
+    size: newImageFile.size,
+  };
+
+  next();
+}
+
 async function uploadToS3(req, res, next) {
   const result = await uploadFile(req.file);
   const key = result.key;
@@ -51,6 +80,7 @@ async function uploadToS3(req, res, next) {
 
 async function unlink(req, res, next) {
   await unlinkFile(req.file.path);
+  await unlinkFile(req.file.destination + "/" + req.file.originalname);
   fs.rmdirSync(req.file.destination);
   next();
 }
