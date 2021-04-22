@@ -49,8 +49,13 @@ async function processImage(req, res, next) {
       : `${originalFileName}.jpeg`;
   const newPath = file.destination + "/" + updatedFileName;
 
+  const jpegOpts = {
+    mozjpeg: true,
+    quality: file.size > 30000 ? 60 : 80,
+  };
+
   const newImageFile = await sharp(file.path)
-    .jpeg({ mozjpeg: true, quality: 80 })
+    .jpeg(jpegOpts)
     .toFile(newPath, (err, info) => {
       if (err) res.send(err);
     })
