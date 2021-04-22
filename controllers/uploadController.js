@@ -112,7 +112,7 @@ async function buildPhoto(req, res, next) {
 // BUILD MONGO DOCUMENT, SAVE, AND HANDLE RESPONSE
 async function buildPost(req, res, next) {
   const { text } = req.body;
-  const { userId } = req.params;
+  const { userId, feedType } = req.params;
 
   const post = new Post({
     text: text || " ",
@@ -122,7 +122,13 @@ async function buildPost(req, res, next) {
 
   post.save();
   photoItem.set({});
-  postController.getFriendsPosts(req, res);
+  if (feedType === "home") {
+    postController.getFriendsPosts(req, res);
+  } else if (feedType === "profile") {
+    postController.getUserPosts(req, res);
+  } else {
+    res.sendStatus(400);
+  }
 }
 
 async function handleProfilePictureChange(userId, res) {
