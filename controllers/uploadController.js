@@ -57,11 +57,7 @@ async function processImage(req, res, next) {
     .toBuffer();
 
   req.file = {
-    fieldname: "file",
-    originalname: req.file.originalname,
-    encoding: req.file.encoding,
-    mimetype: "image/jpeg",
-    destination: req.file.destination,
+    ...req.file,
     filename: updatedFileName,
     path: newPath,
     size: newImageFile.size,
