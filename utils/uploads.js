@@ -12,10 +12,7 @@ const storage = multer.diskStorage({
   },
   filename: (req, file, cb) => {
     const fileName = file.originalname.split(".")[0];
-    return cb(
-      null,
-      Date.now() + "-" + fileName + path.extname(file.originalname)
-    );
+    return cb(null, fileName + path.extname(file.originalname));
   },
   fileFilter: (req, file, cb) => {
     const isGoodType = checkFileType(file);
