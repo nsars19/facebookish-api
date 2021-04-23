@@ -120,8 +120,9 @@ async function buildPost(req, res, next) {
     photo: photoItem.get()._id,
   });
 
-  post.save();
+  await post.save();
   photoItem.set({});
+
   if (feedType === "home") {
     postController.getFriendsPosts(req, res);
   } else if (feedType === "profile") {
